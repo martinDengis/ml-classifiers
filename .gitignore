@@ -1,0 +1,10 @@
+# macOS system files
+.DS_Store
+__MACOSX/
+
+# Python cache files
+__pycache__/
+
+# Visual Studio Code folders
+.vscode/
+.vs
