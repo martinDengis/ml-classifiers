@@ -1,0 +1,40 @@
+The plots display both a decision boundary line and colored areas, each serving different purposes:
+
+1. **Colored Areas**:
+   - The colored areas represent the decision regions of the classifier.
+   - These regions are created using the `plt.contourf` function, which fills the areas between contour lines with colors.
+   - The colors are determined by the predicted probabilities from the `fitted_estimator`.
+   - The `cmap=bg_map` argument specifies the colormap used for these regions.
+   - The `alpha=0.8` argument sets the transparency of the colored areas.
+
+2. **Diagonal Line**:
+   - The diagonal line is added using the `plt.axline` function.
+   - This line represents a specific linear boundary, possibly a theoretical or reference boundary.
+   - The line is drawn in black (`c='k'`).
+
+### Code Context
+Here's the relevant part of the code that creates the colored areas and the line:
+
+```python
+# Create mesh grid for decision boundary
+xx, yy = np.meshgrid(np.arange(x_min, x_max, mesh_step_size),
+                     np.arange(y_min, y_max, mesh_step_size))
+
+# Predict probabilities for each point in the mesh grid
+Z = fitted_estimator.predict_proba(np.c_[xx.ravel(), yy.ravel()])[:, 1]
+Z = Z.reshape(xx.shape)
+
+# Plot the decision boundary with colored areas
+cf = plt.contourf(xx, yy, Z, cmap=bg_map, alpha=0.8, vmin=0, vmax=1)
+
+# Plot the diagonal line
+plt.axline([0, -np.log(3)/(3*0.391)], [-np.log(3)/(3*0.391), 0], c='k')
+```
+
+### Visualization
+- **Colored Areas**: Show the regions where the classifier predicts different classes. The intensity of the color indicates the confidence of the prediction.
+- **Diagonal Line**: Provides a reference or theoretical boundary, which might be used for comparison with the actual decision boundary.
+
+### Example Interpretation
+- If the plot is visualizing a binary classifier, the colored areas might show regions where the classifier predicts class 0 or class 1.
+- The diagonal line could represent a theoretical decision boundary, such as the boundary derived from a logistic regression model.
