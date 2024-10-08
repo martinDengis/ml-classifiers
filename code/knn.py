@@ -22,4 +22,34 @@ from sklearn.metrics import confusion_matrix, accuracy_score
 
 
 if __name__ == "__main__":
-    pass  # Make your experiments here
+    X_train, y_train = make_dataset(n_points=1000)
+    X_test, y_test = make_dataset(n_points=2000)
+    neigh = KNeighborsClassifier(n_neighbors=1)
+    neigh.fit(X_train, y_train)
+    plot_boundary("out/q2/knn_1", neigh, X_test, y_test, title="KNN (k=1)")
+
+    X_train, y_train = make_dataset(n_points=1000)
+    X_test, y_test = make_dataset(n_points=2000)
+    neigh = KNeighborsClassifier(n_neighbors=5)
+    neigh.fit(X_train, y_train)
+    plot_boundary("out/q2/knn_5", neigh, X_test, y_test, title="KNN (k=5)")
+
+    X_train, y_train = make_dataset(n_points=1000)
+    X_test, y_test = make_dataset(n_points=2000)
+    neigh = KNeighborsClassifier(n_neighbors=50)
+    neigh.fit(X_train, y_train)
+    plot_boundary("out/q2/knn_50", neigh, X_test, y_test, title="KNN (k=50)")
+
+    X_train, y_train = make_dataset(n_points=1000)
+    X_test, y_test = make_dataset(n_points=2000)
+    neigh = KNeighborsClassifier(n_neighbors=100)
+    neigh.fit(X_train, y_train)
+    plot_boundary("out/q2/knn_100", neigh, X_test, y_test, title="KNN (k=100)")
+
+    X_train, y_train = make_dataset(n_points=1000)
+    X_test, y_test = make_dataset(n_points=2000)
+    neigh = KNeighborsClassifier(n_neighbors=500)
+    neigh.fit(X_train, y_train)
+    plot_boundary("out/q2/knn_500", neigh, X_test, y_test, title="KNN (k=500)")
+
+
