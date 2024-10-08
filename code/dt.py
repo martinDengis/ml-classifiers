@@ -13,8 +13,9 @@ from data import make_dataset
 from plot import plot_boundary
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import confusion_matrix, accuracy_score
+
 from sklearn.metrics import precision_score, recall_score, f1_score
-from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+from sklearn.metrics import ConfusionMatrixDisplay
 import os
 
 
@@ -63,11 +64,11 @@ def train_and_evaluate(X_train, y_train, X_test, y_test, depths, save_fig=False)
             print("----------")
 
             # Plot the decision boundary
-            output_dir = "out"
+            output_dir = "out/q1"
             if not os.path.exists(output_dir):
                 os.makedirs(output_dir)
 
-            plot_boundary(f"{output_dir}/boundary_depth_{depth}", clf, X_train, y_train, title=f"Decision Boundary for max_depth = {depth}")
+            plot_boundary(f"{output_dir}/boundary_depth_{depth}", clf, X_test, y_test, title=f"Decision Boundary for max_depth = {depth}")
             disp.figure_.savefig(f"{output_dir}/confusion_matrix_depth_{depth}.png")
 
     return accuracies
