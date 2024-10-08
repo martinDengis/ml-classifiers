@@ -112,9 +112,9 @@ def evaluation_metrics(y_test, y_pred, n):
 
     # Plot the confusion matrix
     disp = ConfusionMatrixDisplay(confusion_matrix=cm_normalized)
-    disp.plot()
+    disp.plot(cmap=plt.cm.Blues)
     plt.title(f"Confusion Matrix for n={n}")
-    disp.figure_.savefig(f"{output_dir}/confusion_matrix_n_{n}.png")
+    disp.figure_.savefig(f"{output_dir}/confusion_matrix_n_{n}.pdf")
     plt.close()
 
     return accuracy, precision, recall, f1, cm, cm_normalized

@@ -112,9 +112,9 @@ def evaluation_metrics(y_test, y_pred, depth):
 
     # Plot the confusion matrix
     disp = ConfusionMatrixDisplay(confusion_matrix=cm_normalized)
-    disp.plot()
+    disp.plot(cmap=plt.cm.Blues)
     plt.title(f"Confusion Matrix for max_depth={depth}")
-    disp.figure_.savefig(f"{output_dir}/confusion_matrix_depth_{depth}.png")
+    disp.figure_.savefig(f"{output_dir}/confusion_matrix_depth_{depth}.pdf")
     plt.close()
 
     return accuracy, precision, recall, f1, cm, cm_normalized
