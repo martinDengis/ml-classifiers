@@ -6,13 +6,14 @@ Project 1 - Classification algorithms
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import os
 import numpy as np
 from matplotlib import pyplot as plt
 
 from data import make_dataset
 from plot import plot_boundary
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.metrics import confusion_matrix, accuracy_score
+from sklearn.metrics import ConfusionMatrixDisplay, confusion_matrix, accuracy_score, f1_score, precision_score, recall_score
 
 
 # (Question 1): Decision Trees
