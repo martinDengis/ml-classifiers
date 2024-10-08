@@ -155,6 +155,17 @@ if __name__ == "__main__":
         filename = os.path.join("out/Q3", f"perceptron_boundary_eta_{eta:.0e}")
         plot_boundary(filename, clf, X_test, y_test, 
                      title=f"Decision Boundary (η={eta:.0e})")
+        
+        y_pred = clf.predict(X_test)
+
+        # Compute and save confusion matrix
+        cm = confusion_matrix(y_test, y_pred)
+        cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+        disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=["Negative", "Positive"])
+        disp.plot(cmap=plt.cm.Blues)
+        plt.title(f'Confusion Matrix (η={eta:.0e})')
+        plt.savefig(os.path.join("out/Q3", f"confusion_matrix_eta_{eta:.0e}.pdf"))
+        plt.close()
     
     # 3.b) and 4) Compute average accuracies and standard deviations
     n_runs = 5
@@ -174,15 +185,6 @@ if __name__ == "__main__":
             y_pred = clf.predict(X_test)
             acc = accuracy_score(y_test, y_pred)
             accuracies[eta].append(acc)
-
-            # Compute and save confusion matrix
-            cm = confusion_matrix(y_test, y_pred)
-            cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
-            disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=["Negative", "Positive"])
-            disp.plot(cmap=plt.cm.Blues)
-            plt.title(f'Confusion Matrix (η={eta:.0e})')
-            plt.savefig(os.path.join("out/Q3", f"confusion_matrix_eta_{eta:.0e}.pdf"))
-            plt.close()
 
     # Print results
     print("\nPerceptron Classification Results:")
