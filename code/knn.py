@@ -131,8 +131,10 @@ if __name__ == "__main__":
 
     # Q2.2
     print("\nQ2.2\n----------")
-    accuracies = accuracies_reporting(n_neighbors)
-    
-
-
-
+    accuracies = accuracies_reporting(n_neighbors, n_generation=5)
+    for n in n_neighbors:
+        avg_accuracy = np.mean(accuracies[n])
+        std_accuracy = np.std(accuracies[n])
+        print(f"n: {n}")
+        print(f"Average Accuracy: {avg_accuracy:.3f}")
+        print(f"Standard Deviation: {std_accuracy:.3f}\n")
