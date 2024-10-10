@@ -27,7 +27,7 @@ class PerceptronClassifier(BaseEstimator, ClassifierMixin):
         self.learning_rate = learning_rate
         self.weights = None
 
-    def _sigmoid(self, z):
+    def sigmoid(self, z):
         return 1.0 / (1.0 + np.exp(-z))
 
     def fit(self, X, y):
@@ -78,7 +78,7 @@ class PerceptronClassifier(BaseEstimator, ClassifierMixin):
             for xi, yi in zip(X_shuffled, y_shuffled):
                 # Forward pass
                 z = np.dot(xi, self.weights)
-                prediction = self._sigmoid(z)
+                prediction = self.sigmoid(z)
                 
                 # Compute gradient and update weights
                 error = prediction - yi
@@ -130,7 +130,7 @@ class PerceptronClassifier(BaseEstimator, ClassifierMixin):
         
         # Compute probabilities
         z = np.dot(X_with_bias, self.weights)
-        proba_class_1 = self._sigmoid(z)
+        proba_class_1 = self.sigmoid(z)
         
         # Return probabilities for both classes
         return np.column_stack([1 - proba_class_1, proba_class_1])
@@ -158,7 +158,7 @@ if __name__ == "__main__":
         
         y_pred = clf.predict(X_test)
 
-        # Compute and save confusion matrix
+        # Compute, plot and save confusion matrix
         cm = confusion_matrix(y_test, y_pred)
         cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
         disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=["Negative", "Positive"])
@@ -167,7 +167,7 @@ if __name__ == "__main__":
         plt.savefig(os.path.join("out/Q3", f"confusion_matrix_eta_{eta:.0e}.pdf"))
         plt.close()
     
-    # 3.b) and 4) Compute average accuracies and standard deviations
+    # 4) Compute average accuracies and standard deviations
     n_runs = 5
     accuracies = {eta: [] for eta in learning_rates}
     
