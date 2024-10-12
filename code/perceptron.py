@@ -63,23 +63,23 @@ class PerceptronClassifier(BaseEstimator, ClassifierMixin):
         # TODO: fill in this function
         # Add bias term to X
         X_with_bias = np.column_stack([np.ones(n_instances), X])
-        
+
         # Initialize weights randomly with small values
         self.weights = np.random.randn(n_features + 1) * 0.01
-        
+
         # Stochastic gradient descent
         for _ in range(self.n_iter):
             # Shuffle the data for each epoch
             indices = np.random.permutation(n_instances)
             X_shuffled = X_with_bias[indices]
             y_shuffled = y[indices]
-            
+
             # Update weights for each training example
             for xi, yi in zip(X_shuffled, y_shuffled):
                 # Forward pass
                 z = np.dot(xi, self.weights)
                 prediction = self.sigmoid(z)
-                
+
                 # Compute gradient and update weights
                 error = prediction - yi
                 gradient = error * xi
@@ -124,24 +124,24 @@ class PerceptronClassifier(BaseEstimator, ClassifierMixin):
         # TODO: fill in this function
         if self.weights is None:
             raise ValueError("Model has not been fitted yet.")
-            
+
         # Add bias term to X
         X_with_bias = np.column_stack([np.ones(X.shape[0]), X])
-        
+
         # Compute probabilities
         z = np.dot(X_with_bias, self.weights)
         proba_class_1 = self.sigmoid(z)
-        
+
         # Return probabilities for both classes
         return np.column_stack([1 - proba_class_1, proba_class_1])
 
-if __name__ == "__main__":    
+if __name__ == "__main__":
     # Create output directory if it doesn't exist
-    os.makedirs("out/Q3", exist_ok=True)
-    
+    os.makedirs("out/q3", exist_ok=True)
+
     # Learning rates to test
     learning_rates = [1e-4, 5e-4, 1e-3, 1e-2, 1e-1]
-    
+
     # Set random seed for reproducibility
     np.random.seed(42)
 
@@ -155,37 +155,36 @@ if __name__ == "__main__":
         # Train classifier
         clf = PerceptronClassifier(n_iter=5, learning_rate=eta)
         clf.fit(X_train, y_train)
-        
+
         # Plot and save decision boundary
         filename = os.path.join("out/Q3", f"perceptron_boundary_eta_{eta:.0e}")
-        plot_boundary(filename, clf, X_test, y_test, 
+        plot_boundary(filename, clf, X_test, y_test,
                      title=f"Decision Boundary (η={eta:.0e})")
-        
+
         y_pred = clf.predict(X_test)
 
         # Compute, plot and save confusion matrix
-        cm = confusion_matrix(y_test, y_pred)
-        cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+        cm = confusion_matrix(y_test, y_pred, normalize='all')
         disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=["Negative", "Positive"])
         disp.plot(cmap=plt.cm.Blues)
         plt.title(f'Confusion Matrix (η={eta:.0e})')
         plt.savefig(os.path.join("out/Q3", f"confusion_matrix_eta_{eta:.0e}.pdf"))
         plt.close()
-    
+
     # 4) Compute average accuracies and standard deviations
     n_runs = 5
     accuracies = {eta: [] for eta in learning_rates}
-    
+
     for run in range(n_runs):
         # Generate new datasets for each run with different but reproducible random states
         X_train, y_train = make_dataset(1000, random_state=42 + run)
         X_test, y_test = make_dataset(2000, random_state=43 + run)
-        
+
         for eta in learning_rates:
             # Train classifier
             clf = PerceptronClassifier(n_iter=5, learning_rate=eta)
             clf.fit(X_train, y_train)
-            
+
             # Compute accuracy
             y_pred = clf.predict(X_test)
             acc = accuracy_score(y_test, y_pred)
