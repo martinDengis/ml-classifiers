@@ -137,7 +137,7 @@ class PerceptronClassifier(BaseEstimator, ClassifierMixin):
 
 if __name__ == "__main__":    
     # Create output directory if it doesn't exist
-    os.makedirs("out/Q3", exist_ok=True)
+    os.makedirs("out/q3", exist_ok=True)
     
     # Learning rates to test
     learning_rates = [1e-4, 5e-4, 1e-3, 1e-2, 1e-1]
@@ -157,7 +157,7 @@ if __name__ == "__main__":
         clf.fit(X_train, y_train)
         
         # Plot and save decision boundary
-        filename = os.path.join("out/Q3", f"perceptron_boundary_eta_{eta:.0e}")
+        filename = os.path.join("out/q3", f"perceptron_boundary_eta_{eta:.0e}")
         plot_boundary(filename, clf, X_test, y_test, 
                      title=f"Decision Boundary (η={eta:.0e})")
         
@@ -169,7 +169,7 @@ if __name__ == "__main__":
         disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=["Negative", "Positive"])
         disp.plot(cmap=plt.cm.Blues)
         plt.title(f'Confusion Matrix (η={eta:.0e})')
-        plt.savefig(os.path.join("out/Q3", f"confusion_matrix_eta_{eta:.0e}.pdf"))
+        plt.savefig(os.path.join("out/q3", f"confusion_matrix_eta_{eta:.0e}.pdf"))
         plt.close()
     
     # 4) Compute average accuracies and standard deviations

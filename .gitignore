@@ -8,3 +8,7 @@ __pycache__/
 # Visual Studio Code folders
 .vscode/
 .vs
+
+# Outputs
+*.png
+*.pdf
