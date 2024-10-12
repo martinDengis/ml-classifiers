@@ -8,3 +8,6 @@ __pycache__/
 # Visual Studio Code folders
 .vscode/
 .vs
+
+# Ignore PDF
+*.pdf
