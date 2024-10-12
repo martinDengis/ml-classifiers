@@ -105,8 +105,7 @@ def evaluation_metrics(y_test, y_pred, depth):
     precision = precision_score(y_test, y_pred) # Precision = TP / (TP + FP)
     recall = recall_score(y_test, y_pred)    # Recall = TP / (TP + FN)
     f1 = f1_score(y_test, y_pred)   # F1-Score = 2 * (Precision * Recall) / (Precision + Recall)
-    cm = confusion_matrix(y_test, y_pred)
-    cm_normalized = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+    cm = confusion_matrix(y_test, y_pred, normalize="all")    # Confusion Matrix
 
     # Print evaluation metrics
     f_metrics = (
@@ -118,13 +117,11 @@ def evaluation_metrics(y_test, y_pred, depth):
     print(f"Max Depth: {depth}\n{f_metrics}")
 
     # Plot the confusion matrix
-    disp = ConfusionMatrixDisplay(confusion_matrix=cm_normalized)
+    disp = ConfusionMatrixDisplay(confusion_matrix=cm)
     disp.plot(cmap=plt.cm.Blues)
     plt.title(f"Confusion Matrix for max_depth={depth}")
     disp.figure_.savefig(f"{output_dir}/confusion_matrix_depth_{depth}.pdf")
     plt.close()
-
-    return accuracy, precision, recall, f1, cm, cm_normalized
 
 
 if __name__ == "__main__":
