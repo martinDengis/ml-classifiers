@@ -17,9 +17,14 @@ from sklearn.metrics import ConfusionMatrixDisplay, confusion_matrix, accuracy_s
 
 
 # (Question 1): Decision Trees
+
+    # Create output directory
 output_dir = "out/q1"
-if not os.path.exists(output_dir):
-    os.makedirs(output_dir)
+os.makedirs(output_dir, exist_ok=True)
+    # Set random seeds for reproducibility
+RANDOM_SEED = 42
+np.random.seed(RANDOM_SEED)
+
 
 def train_and_evaluate(X_train, y_train, X_test, y_test, depths, eval_metrics=True):
     """
@@ -38,7 +43,7 @@ def train_and_evaluate(X_train, y_train, X_test, y_test, depths, eval_metrics=Tr
     """
     accuracies = {depth: 0 for depth in depths} # Initialize dictionary to store accuracies
     for depth in depths:
-        clf = DecisionTreeClassifier(max_depth=depth)   # Initialize Decision Tree Classifier
+        clf = DecisionTreeClassifier(max_depth=depth, random_state=RANDOM_SEED)   # Initialize Decision Tree Classifier
         clf.fit(X_train, y_train)  # Fit model on training data
         y_pred = clf.predict(X_test)    # Predict labels for test set
         plot_boundary(f"{output_dir}/boundary_depth_{depth}", clf, X_test, y_test, title=f"Decision Boundary for max_depth = {depth}")
@@ -65,9 +70,11 @@ def accuracies_reporting(depths, n_generation=5):
         dict: A dictionary where keys are tree depths and values are lists of accuracies for each generation.
     """
     accuracies = {depth: [] for depth in depths}
-    for _ in range(n_generation):
-        X_train, y_train = make_dataset(n_points=1000)
-        X_test, y_test = make_dataset(n_points=2000)
+    for i in range(n_generation):
+        # Generate new datasets for each generation with different but reproducible random states
+        X_train, y_train = make_dataset(n_points=1000, random_state=RANDOM_SEED + i)
+        X_test, y_test = make_dataset(n_points=2000, random_state=RANDOM_SEED + i + 1)
+
         gen_accuracies = train_and_evaluate(X_train, y_train, X_test, y_test, depths, eval_metrics=False)
 
         for depth in depths:
@@ -125,8 +132,8 @@ if __name__ == "__main__":
 
     # Q1.1
     print("Q1.1\n----------")
-    X_train, y_train = make_dataset(n_points=1000)
-    X_test, y_test = make_dataset(n_points=2000)
+    X_train, y_train = make_dataset(n_points=1000, random_state=RANDOM_SEED)
+    X_test, y_test = make_dataset(n_points=2000, random_state=RANDOM_SEED + 1)
     train_and_evaluate(X_train, y_train, X_test, y_test, depths, eval_metrics=True)
 
     # Q1.2
@@ -138,4 +145,3 @@ if __name__ == "__main__":
         print(f"Max Depth: {depth}")
         print(f"Average Accuracy: {avg_accuracy:.3f}")
         print(f"Standard Deviation: {std_accuracy:.3f}\n")
-
