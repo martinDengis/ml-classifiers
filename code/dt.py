@@ -19,7 +19,7 @@ from sklearn.metrics import ConfusionMatrixDisplay, confusion_matrix, accuracy_s
 # (Question 1): Decision Trees
 
     # Create output directory
-output_dir = "out/q1"
+output_dir = "./out/q1"
 os.makedirs(output_dir, exist_ok=True)
     # Set random seeds for reproducibility
 RANDOM_SEED = 42
