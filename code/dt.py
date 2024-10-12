@@ -138,7 +138,7 @@ if __name__ == "__main__":
 
     # Q1.2
     print("Q1.2\n----------")
-    accuracies = accuracies_reporting(depths, 5)
+    accuracies = accuracies_reporting(depths, n_generation=5)
     for depth in depths:
         avg_accuracy = np.mean(accuracies[depth])
         std_accuracy = np.std(accuracies[depth])

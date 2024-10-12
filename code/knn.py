@@ -17,9 +17,12 @@ from sklearn.metrics import ConfusionMatrixDisplay, confusion_matrix, accuracy_s
 
 
 # (Question 2): KNN
-output_dir = "out/q2"
-if not os.path.exists(output_dir):
-    os.makedirs(output_dir)
+    # Create output directory
+output_dir = "./out/q2"
+os.makedirs(output_dir, exist_ok=True)
+    # Set random seeds for reproducibility
+RANDOM_SEED = 42
+np.random.seed(RANDOM_SEED)
 
 
 def train_and_evaluate(X_train, y_train, X_test, y_test, n_neighbors, eval_metrics=True):
@@ -65,9 +68,11 @@ def accuracies_reporting(n_neighbors, n_generation=5):
         dict: A dictionary where keys are the number of neighbors and values are lists of accuracies over the generations.
     """
     accuracies = {n: [] for n in n_neighbors}
-    for _ in range(n_generation):
-        X_train, y_train = make_dataset(n_points=1000)
-        X_test, y_test = make_dataset(n_points=2000)
+    for i in range(n_generation):
+        # Generate new datasets for each generation with different but reproducible random states
+        X_train, y_train = make_dataset(n_points=1000, random_state=RANDOM_SEED + i)
+        X_test, y_test = make_dataset(n_points=2000, random_state=RANDOM_SEED + i + 1)
+
         gen_accuracies = train_and_evaluate(X_train, y_train, X_test, y_test, n_neighbors, eval_metrics=False)
 
         for n in n_neighbors:
@@ -125,9 +130,9 @@ if __name__ == "__main__":
 
     # Q2.1
     print("Q2.1\n----------")
-    X_train, y_train = make_dataset(n_points=1000)
-    X_test, y_test = make_dataset(n_points=2000)
-    train_and_evaluate(X_train, y_train, X_test, y_test, n_neighbors)
+    X_train, y_train = make_dataset(n_points=1000, random_state=RANDOM_SEED)
+    X_test, y_test = make_dataset(n_points=2000, random_state=RANDOM_SEED + 1)
+    train_and_evaluate(X_train, y_train, X_test, y_test, n_neighbors, eval_metrics=True)
 
     # Q2.2
     print("\nQ2.2\n----------")
