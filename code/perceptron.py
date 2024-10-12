@@ -142,9 +142,14 @@ if __name__ == "__main__":
     # Learning rates to test
     learning_rates = [1e-4, 5e-4, 1e-3, 1e-2, 1e-1]
     
-    # Generate dataset with fixed random state
-    X_train, y_train = make_dataset(1000)
-    X_test, y_test = make_dataset(2000)
+    # Set random seed for reproducibility
+    np.random.seed(42)
+
+    # Generate dataset with fixed random state for reproducibility
+    random_state_train = 42
+    random_state_test = 43
+    X_train, y_train = make_dataset(1000, random_state=random_state_train)
+    X_test, y_test = make_dataset(2000, random_state=random_state_test)
     # 3.a) Generate decision boundary plots for different learning rates
     for eta in learning_rates:
         # Train classifier
@@ -173,8 +178,8 @@ if __name__ == "__main__":
     
     for run in range(n_runs):
         # Generate new datasets for each run with different but reproducible random states
-        X_train, y_train = make_dataset(1000)
-        X_test, y_test = make_dataset(2000)
+        X_train, y_train = make_dataset(1000, random_state=42 + run)
+        X_test, y_test = make_dataset(2000, random_state=43 + run)
         
         for eta in learning_rates:
             # Train classifier
