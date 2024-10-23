@@ -13,12 +13,43 @@ from data import make_dataset
 from plot import plot_boundary
 from sklearn.base import BaseEstimator
 from sklearn.base import ClassifierMixin
-from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, accuracy_score
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, accuracy_score,  precision_score, recall_score, f1_score
 import os
 
 
 # (Question 3): Perceptron
 
+def evaluate_model(y_test, y_pred, cm):
+    """
+    Computes and prints the accuracy, precision, recall, F1-score, and confusion matrix.
+
+    Parameters:
+    - y_test: Ground truth (true labels)
+    - y_pred: Predicted labels
+    - normalize_cm: Normalization option for confusion matrix ('all', 'true', 'pred', or None)
+
+    Returns:
+    - A dictionary containing the computed metrics (accuracy, precision, recall, f1) and the confusion matrix.
+    """
+    
+    # Calculate metrics
+    accuracy = accuracy_score(y_test, y_pred)
+    precision = precision_score(y_test, y_pred)
+    recall = recall_score(y_test, y_pred)
+    f1 = f1_score(y_test, y_pred)
+
+    # Print evaluation metrics
+    f_metrics = (
+        f"- Accuracy: {accuracy:.3f};\n"
+        f"- Precision: {precision:.3f};\n"
+        f"- Recall: {recall:.3f};\n"
+        f"- F1-Score: {f1:.3f}\n"
+    )
+    print(f_metrics)
+    
+    # Print confusion matrix
+    print("Confusion Matrix:")
+    print(cm)
 
 class PerceptronClassifier(BaseEstimator, ClassifierMixin):
 
@@ -165,11 +196,13 @@ if __name__ == "__main__":
 
         # Compute, plot and save confusion matrix
         cm = confusion_matrix(y_test, y_pred, normalize='all')
-        disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=["Negative", "Positive"])
+        disp = ConfusionMatrixDisplay(confusion_matrix=cm)
         disp.plot(cmap=plt.cm.Blues)
         plt.title(f'Confusion Matrix (η={eta:.0e})')
         plt.savefig(os.path.join("out/q3", f"confusion_matrix_eta_{eta:.0e}.pdf"))
         plt.close()
+        print(f"Evaluating model with learning rate η={eta:.0e}")
+        evaluate_model(y_test, y_pred, cm)
 
     # 4) Compute average accuracies and standard deviations
     n_runs = 5
