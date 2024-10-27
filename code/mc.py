@@ -19,6 +19,7 @@ from perceptron import PerceptronClassifier
 
 # Constants
 RANDOM_SEED = 42
+np.random.seed(RANDOM_SEED)
 k = 10  # Number of folds for cross-validation
 n_generations = 5  # Number of dataset generations
 
@@ -50,17 +51,19 @@ def evaluate_model(clf, X_train, y_train, kf):
         accuracies.append(accuracy) # Store the accuracy
     return np.mean(accuracies)
 
-def find_best_hyperparameters():
+def find_best_hyperparameters(X_train, y_train):
     """
-    Find the best hyperparameters for each model using only the learning set and cross-validation.
+    Find the best hyperparameters for each model using only the training set and cross-validation.
+
+    Args:
+        X_train (array-like): Training data features.
+        y_train (array-like): Training data labels.
 
     Returns:
         dict: Dictionary containing the best hyperparameters for each model.
-        dict: Dictionary containing all hyperparameter values and their performances.
     """
     best_hyperparams = {}
-    all_hyperparams_results = {}
-    X_train, y_train = make_dataset(n_points=1000, random_state=RANDOM_SEED)
+    #X_train, y_train = make_dataset(n_points=1000, random_state=RANDOM_SEED)
 
     # K-Fold Cross-Validation
     kf = KFold(n_splits=k, shuffle=True, random_state=RANDOM_SEED)
@@ -77,7 +80,6 @@ def find_best_hyperparameters():
             best_accuracy = accuracy
             best_depth = depth
     best_hyperparams['DecisionTree'] = best_depth
-    all_hyperparams_results['DecisionTree'] = results
 
     # KNN
     best_n_neighbors = None
@@ -91,7 +93,6 @@ def find_best_hyperparameters():
             best_accuracy = accuracy
             best_n_neighbors = n_neighbors
     best_hyperparams['KNN'] = best_n_neighbors
-    all_hyperparams_results['KNN'] = results
 
     # Perceptron
     best_eta = None
@@ -105,16 +106,14 @@ def find_best_hyperparameters():
             best_accuracy = accuracy
             best_eta = eta
     best_hyperparams['Perceptron'] = best_eta
-    all_hyperparams_results['Perceptron'] = results
 
-    return best_hyperparams, all_hyperparams_results
+    return best_hyperparams
 
-def test_model_accuracy(best_hyperparams, n_irr=0):
+def test_model_accuracy(n_irr=0):
     """
     Test the model using the best hyperparameters on the test set and calculate the average accuracy over multiple generations.
 
     Args:
-        best_hyperparams (dict): Best hyperparameters found for each model.
         n_irr (int): Number of irrelevant (noise) features to add to the dataset.
 
     Returns:
@@ -129,8 +128,9 @@ def test_model_accuracy(best_hyperparams, n_irr=0):
     for generation in range(n_generations):
         # Generate dataset
         X_train, y_train = make_dataset(n_points=1000, random_state=RANDOM_SEED + generation, n_irrelevant=n_irr)
-        X_test, y_test = make_dataset(n_points=2000, random_state=RANDOM_SEED + generation, n_irrelevant=n_irr)
+        X_test, y_test = make_dataset(n_points=2000, random_state=RANDOM_SEED +1 + generation, n_irrelevant=n_irr)
 
+        best_hyperparams = find_best_hyperparameters(X_train, y_train)
         # Decision Tree
         clf = DecisionTreeClassifier(max_depth=best_hyperparams['DecisionTree'], random_state=RANDOM_SEED)
         clf.fit(X_train, y_train)
@@ -163,32 +163,18 @@ def test_model_accuracy(best_hyperparams, n_irr=0):
     return summary
 
 if __name__ == "__main__":
-    # Q4.2 
+    # Q4.2
     print("Q4.2\n----------")
-    # Find the best hyperparameters using the learning set
-    best_hyperparams, all_hyperparams_results = find_best_hyperparameters()
-    print("\nAll hyperparameter performances based on learning set:")
-    for model, results in all_hyperparams_results.items():
-        print(f"\n{model} results:")
-        for hyperparam_value, accuracy in results.items():
-            hyperparam_display = f"{hyperparam_value:.0e}" if isinstance(hyperparam_value, float) else hyperparam_value
-            print(f"Hyperparameter: {hyperparam_display}, Accuracy: {accuracy:.3f}")
-
-    # Print the best hyperparameters
-    print("\nBest hyperparameters based on learning set:")
-    for model, param in best_hyperparams.items():
-        hyperparam_display = f"{param:.0e}" if isinstance(param, float) else param
-        print(f"{model}: {hyperparam_display}")
-
-    # Test the models on the test set with the best hyperparameters
-    results_original = test_model_accuracy(best_hyperparams, n_irr=0)
-    print("\nTest set results with only original features:")
+    #Test the models on the test set with the best hyperparameters
+    results_original = test_model_accuracy( n_irr=0)
+    print("Test set results with only original features:")
     for model, result in results_original.items():
         print(f"{model} - Mean accuracy: {result['mean_accuracy']:.3f}, Std deviation: {result['std_deviation']:.3f}")
 
     # Q4.3
+    print()
     print("Q4.3\n----------")
-    results_with_noise = test_model_accuracy(best_hyperparams, n_irr=200)
-    print("\nTest set results with 200 irrelevant features:")
+    results_with_noise = test_model_accuracy( n_irr=200)
+    print("Test set results with 200 irrelevant features:")
     for model, result in results_with_noise.items():
         print(f"{model} - Mean accuracy: {result['mean_accuracy']:.3f}, Std deviation: {result['std_deviation']:.3f}")
