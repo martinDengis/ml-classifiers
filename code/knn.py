@@ -42,10 +42,10 @@ def train_and_evaluate(X_train, y_train, X_test, y_test, n_neighbors, eval_metri
     """
     accuracies = {n: 0 for n in n_neighbors}    # Initialize dictionary to store accuracies
     for n in n_neighbors:
-        neigh = KNeighborsClassifier(n_neighbors=n)   # Initialize KNN Classifier
-        neigh.fit(X_train, y_train) # Fit model on training data
-        y_pred = neigh.predict(X_test)  # Predict labels for test set
-        plot_boundary(f"{output_dir}/knn_{n}", neigh, X_test, y_test, title=f"KNN (k={n})")
+        knn = KNeighborsClassifier(n_neighbors=n)   # Initialize KNN Classifier
+        knn.fit(X_train, y_train) # Fit model on training data
+        y_pred = knn.predict(X_test)  # Predict labels for test set
+        plot_boundary(f"{output_dir}/knn_{n}", knn, X_test, y_test, title=f"KNN (k={n})")
 
         # Evaluation metrics for current n
         accuracies[n] = accuracy_score(y_test, y_pred)

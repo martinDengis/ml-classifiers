@@ -73,8 +73,8 @@ def find_best_hyperparameters(X_train, y_train):
     best_accuracy = 0
     results = {}
     for depth in depths:
-        clf = DecisionTreeClassifier(max_depth=depth, random_state=RANDOM_SEED)
-        accuracy = evaluate_model(clf, X_train, y_train, kf)
+        tree = DecisionTreeClassifier(max_depth=depth, random_state=RANDOM_SEED)
+        accuracy = evaluate_model(tree, X_train, y_train, kf)
         results[depth] = accuracy
         if accuracy > best_accuracy:
             best_accuracy = accuracy
@@ -86,8 +86,8 @@ def find_best_hyperparameters(X_train, y_train):
     best_accuracy = 0
     results = {}
     for n_neighbors in n_neighbors_list:
-        clf = KNeighborsClassifier(n_neighbors=n_neighbors)
-        accuracy = evaluate_model(clf, X_train, y_train, kf)
+        knn = KNeighborsClassifier(n_neighbors=n_neighbors)
+        accuracy = evaluate_model(knn, X_train, y_train, kf)
         results[n_neighbors] = accuracy
         if accuracy > best_accuracy:
             best_accuracy = accuracy
@@ -99,8 +99,8 @@ def find_best_hyperparameters(X_train, y_train):
     best_accuracy = 0
     results = {}
     for eta in learning_rates:
-        clf = PerceptronClassifier(n_iter=5, learning_rate=eta)
-        accuracy = evaluate_model(clf, X_train, y_train, kf)
+        perceptron = PerceptronClassifier(n_iter=5, learning_rate=eta)
+        accuracy = evaluate_model(perceptron, X_train, y_train, kf)
         results[eta] = accuracy
         if accuracy > best_accuracy:
             best_accuracy = accuracy
@@ -132,23 +132,23 @@ def test_model_accuracy(n_irr=0):
 
         best_hyperparams = find_best_hyperparameters(X_train, y_train)
         # Decision Tree
-        clf = DecisionTreeClassifier(max_depth=best_hyperparams['DecisionTree'], random_state=RANDOM_SEED)
-        clf.fit(X_train, y_train)
-        y_pred = clf.predict(X_test)
+        tree = DecisionTreeClassifier(max_depth=best_hyperparams['DecisionTree'], random_state=RANDOM_SEED)
+        tree.fit(X_train, y_train)
+        y_pred = tree.predict(X_test)
         accuracy = accuracy_score(y_test, y_pred)
         results['DecisionTree'].append(accuracy)
 
         # KNN
-        clf = KNeighborsClassifier(n_neighbors=best_hyperparams['KNN'])
-        clf.fit(X_train, y_train)
-        y_pred = clf.predict(X_test)
+        knn = KNeighborsClassifier(n_neighbors=best_hyperparams['KNN'])
+        knn.fit(X_train, y_train)
+        y_pred = knn.predict(X_test)
         accuracy = accuracy_score(y_test, y_pred)
         results['KNN'].append(accuracy)
 
         # Perceptron
-        clf = PerceptronClassifier(n_iter=5, learning_rate=best_hyperparams['Perceptron'])
-        clf.fit(X_train, y_train)
-        y_pred = clf.predict(X_test)
+        perceptron = PerceptronClassifier(n_iter=5, learning_rate=best_hyperparams['Perceptron'])
+        perceptron.fit(X_train, y_train)
+        y_pred = perceptron.predict(X_test)
         accuracy = accuracy_score(y_test, y_pred)
         results['Perceptron'].append(accuracy)
 

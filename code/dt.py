@@ -43,10 +43,10 @@ def train_and_evaluate(X_train, y_train, X_test, y_test, depths, eval_metrics=Tr
     """
     accuracies = {depth: 0 for depth in depths} # Initialize dictionary to store accuracies
     for depth in depths:
-        clf = DecisionTreeClassifier(max_depth=depth, random_state=RANDOM_SEED)   # Initialize Decision Tree Classifier
-        clf.fit(X_train, y_train)  # Fit model on training data
-        y_pred = clf.predict(X_test)    # Predict labels for test set
-        plot_boundary(f"{output_dir}/boundary_depth_{depth}", clf, X_test, y_test, title=f"Decision Boundary for max_depth = {depth}")
+        tree = DecisionTreeClassifier(max_depth=depth, random_state=RANDOM_SEED)   # Initialize Decision Tree Classifier
+        tree.fit(X_train, y_train)  # Fit model on training data
+        y_pred = tree.predict(X_test)    # Predict labels for test set
+        plot_boundary(f"{output_dir}/boundary_depth_{depth}", tree, X_test, y_test, title=f"Decision Boundary for max_depth = {depth}")
 
         # Evaluation metrics for current depth
         accuracy = accuracy_score(y_test, y_pred)   # Accuracy = (TP + TN) / (TP + TN + FP + FN)

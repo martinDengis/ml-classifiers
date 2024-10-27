@@ -31,7 +31,7 @@ def evaluate_model(y_test, y_pred, cm):
     Returns:
     - A dictionary containing the computed metrics (accuracy, precision, recall, f1) and the confusion matrix.
     """
-    
+
     # Calculate metrics
     accuracy = accuracy_score(y_test, y_pred)
     precision = precision_score(y_test, y_pred)
@@ -46,7 +46,7 @@ def evaluate_model(y_test, y_pred, cm):
         f"- F1-Score: {f1:.3f}\n"
     )
     print(f_metrics)
-    
+
     # Print confusion matrix
     print("Confusion Matrix:")
     print(cm)
@@ -184,15 +184,15 @@ if __name__ == "__main__":
     # 3.a) Generate decision boundary plots for different learning rates
     for eta in learning_rates:
         # Train classifier
-        clf = PerceptronClassifier(n_iter=5, learning_rate=eta)
-        clf.fit(X_train, y_train)
+        perceptron = PerceptronClassifier(n_iter=5, learning_rate=eta)
+        perceptron.fit(X_train, y_train)
 
         # Plot and save decision boundary
         filename = os.path.join("out/q3", f"perceptron_boundary_eta_{eta:.0e}")
-        plot_boundary(filename, clf, X_test, y_test,
+        plot_boundary(filename, perceptron, X_test, y_test,
                      title=f"Decision Boundary (η={eta:.0e})")
 
-        y_pred = clf.predict(X_test)
+        y_pred = perceptron.predict(X_test)
 
         # Compute, plot and save confusion matrix
         cm = confusion_matrix(y_test, y_pred, normalize='all')
@@ -215,11 +215,11 @@ if __name__ == "__main__":
 
         for eta in learning_rates:
             # Train classifier
-            clf = PerceptronClassifier(n_iter=5, learning_rate=eta)
-            clf.fit(X_train, y_train)
+            perceptron = PerceptronClassifier(n_iter=5, learning_rate=eta)
+            perceptron.fit(X_train, y_train)
 
             # Compute accuracy
-            y_pred = clf.predict(X_test)
+            y_pred = perceptron.predict(X_test)
             acc = accuracy_score(y_test, y_pred)
             accuracies[eta].append(acc)
 
