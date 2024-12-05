@@ -1,10 +1,4 @@
-# ELEN0062 - Introduction to machine learning
-# Project 1 - Classification algorithms
-
-> Register to the course on gradescope: https://www.gradescope.com
-> 
-> The course entry code is **EVGWRX**. Please register with your official ULiège email address
-
+# (ELEN0062) Project 1 - Classification algorithms
 *October 2nd, 2024*
 
 In this first project, you will get accustomed with some classical machine learning algorithms and concepts, such as under and overfitting. For each algorithm, we ask you to deliver a separate Python script. Make sure that your experiments are reproducible (e.g., by manually fixing random seeds). Add a _brief_ report (PDF format, roughly 4 pages without the figures) giving your observations and conclusions. Each project must be carried out by groups of _two_ to _three students_ and submitted to Gradescope before _October 27, 23:59 GMT+2_. There will be two projects to submit to: one for your Python scripts and one for your report. Note that attention will be paid to how you present your results. Careful thoughts in particular - but not limited to - should be given when it comes to plots. Values for the hyperparameters of all the methods tested are given below to answer the various questions. However, feel free to deviate from these values to support your discussions if you feel it is appropriate.
